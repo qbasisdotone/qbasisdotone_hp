@@ -1,0 +1,90 @@
+---
+import { asset, homeOf, site, t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = t(locale);
+const mailto = `mailto:${site.contactEmail}`;
+---
+
+<div class="announce">
+  <div class="announce__inner">
+    <span class="announce__badge">{copy.announce.badge}</span>
+    <span class="announce__text">{copy.announce.text}</span>
+    <a class="announce__link" href={mailto}>{copy.announce.link} →</a>
+  </div>
+</div>
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href={homeOf(locale)} aria-label={site.company}>
+      <img src={asset(site.images.logo)} alt={site.company} width="160" height="35" />
+    </a>
+
+    <nav class="header__nav" aria-label={copy.nav.menu}>
+      {copy.nav.items.map((item) => <a href={item.href}>{item.label}</a>)}
+    </nav>
+
+    <div class="header__actions">
+      <div class="lang" role="group" aria-label="Language">
+        <a href={homeOf("ko")} hreflang="ko" lang="ko" aria-current={locale === "ko" ? "page" : undefined}>KOR</a>
+        <span aria-hidden="true">|</span>
+        <a href={homeOf("en")} hreflang="en" lang="en" aria-current={locale === "en" ? "page" : undefined}>EN</a>
+      </div>
+      <a class="btn btn--primary btn--sm header__cta" href={mailto}>{copy.nav.cta}</a>
+    </div>
+  </div>
+</header>
+
+<style>
+  .announce { background: var(--white); padding-top: var(--space-4); }
+  .announce { display: flex; justify-content: center; }
+  .announce__inner { display: flex; }
+  .announce__inner {
+    width: fit-content; max-width: calc(100% - 32px);
+    gap: 10px; align-items: center;
+    padding: 6px 12px 6px 6px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    background: var(--surface-page);
+    font-size: var(--text-sm);
+    color: var(--text-body);
+  }
+  .announce__badge {
+    font: var(--fw-medium) var(--text-2xs) / 1 var(--font-mono);
+    letter-spacing: var(--tracking-wide);
+    color: var(--cyan-700);
+    background: var(--cyan-100);
+    padding: 5px 8px;
+    border-radius: var(--radius-pill);
+  }
+  .announce__link { font-weight: var(--fw-medium); white-space: nowrap; }
+  @media (max-width: 560px) { .announce__text { display: none; } }
+
+  .header {
+    position: sticky; top: 0; z-index: var(--z-sticky);
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: saturate(1.4) blur(12px);
+    -webkit-backdrop-filter: saturate(1.4) blur(12px);
+    border-bottom: 1px solid transparent;
+  }
+  .header__inner { height: var(--header-h); display: flex; align-items: center; gap: var(--space-8); }
+  .header__logo img { height: 30px; width: auto; }
+  .header__nav { display: flex; gap: var(--space-7); margin-left: auto; }
+  .header__nav a { color: var(--text-body); font-size: var(--text-sm); font-weight: var(--fw-medium); }
+  .header__nav a:hover { color: var(--brand); text-decoration: none; }
+  .header__actions { display: flex; align-items: center; gap: var(--space-6); }
+
+  .lang { display: flex; align-items: center; gap: 6px; font: var(--fw-medium) var(--text-xs) / 1 var(--font-mono); color: var(--ink-300); }
+  .lang a { color: var(--text-muted); padding: 4px 2px; }
+  .lang a:hover { color: var(--text-strong); text-decoration: none; }
+  .lang a[aria-current="page"] { color: var(--text-strong); font-weight: var(--fw-bold); }
+
+  @media (max-width: 900px) {
+    .header__nav { display: none; }
+    .header__actions { margin-left: auto; gap: var(--space-5); }
+  }
+  @media (max-width: 400px) { .header__cta { display: none; } }
+</style>

@@ -1,0 +1,67 @@
+---
+import { t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const copy = t(Astro.props.locale).platform;
+const toneClass: Record<string, string> = { blue: "graph", cyan: "graph graph--cyan", ink: "graph graph--ink" };
+---
+
+<section class="section" id="platform">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{copy.eyebrow}</span>
+      <h2 class="section-title">{copy.title}</h2>
+      <p class="section-lead">{copy.body}</p>
+    </div>
+
+    <div class="cards">
+      {
+        copy.cards.map((card) => (
+          <article class={`card ${toneClass[card.tone] ?? "graph"}`}>
+            <h3 class="card__title">{card.title}</h3>
+            <span class="card__ket" aria-hidden="true">{card.tag}</span>
+            <p class="card__body">{card.body}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-7); }
+  .card {
+    position: relative;
+    display: flex; flex-direction: column;
+    min-height: 380px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .card__title {
+    padding: var(--space-7) var(--space-7) 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: var(--text-xl);
+    letter-spacing: var(--tracking-tight);
+  }
+  .card__ket {
+    margin: auto;
+    font: var(--fw-medium) 56px / 1 var(--font-mono);
+    color: var(--graph-ink);
+  }
+  .card__body {
+    margin: 0;
+    padding: var(--space-6) var(--space-7);
+    background: var(--graph-bg);
+    border-top: 1px solid var(--graph-line);
+    font-size: var(--text-base);
+    line-height: var(--leading-normal);
+    color: var(--text-body);
+  }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; }
+    .card { min-height: 260px; }
+  }
+</style>

@@ -1,0 +1,178 @@
+{
+  "meta": { "title": "Qbasis.One | A development environment for quantum software",
+    "description": "Define the problem with a matrix and a function. The DSL synthesizes the quantum circuit and the platform runs it."
+  },
+  "nav": {
+    "items": [
+      { "label": "Platform", "href": "#platform" },
+      { "label": "DSL", "href": "#dsl" },
+      { "label": "Measured", "href": "#measured" },
+      { "label": "FAQ", "href": "#faq" }
+    ],
+    "cta": "Contact us",
+    "menu": "Menu"
+  },
+  "announce": {
+    "badge": "PREVIEW",
+    "text": "The QASIS platform preview is in preparation",
+    "link": "Get in touch"
+  },
+  "hero": {
+    "titleLine1": "Aware just what to solve.",
+    "titleLine2": "The DSL builds the circuit.",
+    "sub": "Qbasis.One builds a development environment for quantum software. Define the problem with a matrix and a function; the DSL synthesizes the circuit, and the platform runs it and returns the results.",
+    "primary": "Request preview",
+    "secondary": "Explore the DSL",
+    "codeFile": "solve.py",
+    "outputTitle": "Output",
+    "outputLines": [
+      { "k": "Qubits", "v": "4 (anc) + 3 (sys)" },
+      { "k": "Run", "v": "qasis.gpu-sim, 32,768 shots" },
+      { "k": "Circuit fidelity", "v": "Σ√(p·q) = 0.999917" }
+    ],
+    "verdict": "PASS"
+  },
+  "platform": {
+    "eyebrow": "Platform",
+    "title": "Author locally. Execute remotely.",
+    "body": "The Qbasis platform has three parts: the DSL, the execution platform, and the execution backends. The only thing that leaves your machine is a submission.",
+    "cards": [
+      {
+        "tag": "|0⟩",
+        "title": "Quantum DSL",
+        "body": "Circuit synthesis, cost-function building, and optimization run locally. Shipped as a Python SDK.",
+        "tone": "blue"
+      },
+      {
+        "tag": "|1⟩",
+        "title": "Execution platform",
+        "body": "Manages submissions, queues, sessions, and stored results. Job status and convergence curves are viewable on the web.",
+        "tone": "cyan"
+      },
+      {
+        "tag": "|+⟩",
+        "title": "Execution backends",
+        "body": "Runs on our own GPU simulator. Quantum hardware (QPU) access is being prepared behind the same submission format.",
+        "tone": "ink"
+      }
+    ]
+  },
+  "features": {
+    "eyebrow": "Quantum DSL",
+    "title": "Write only the code that defines the algorithm",
+    "body": "Block encoding, polynomial approximation, phase-factor computation, and reading measurement results are handled by the DSL.",
+    "items": [
+      {
+        "id": "compare",
+        "title": "Say what to solve",
+        "body": "Assembling the same linear system from a general-purpose quantum SDK's gates means getting every listed item correct by hand. If one is wrong, the circuit still runs and only the answer is wrong. With the DSL it is two lines that take the matrix A and the function f."
+      },
+      {
+        "id": "scaling",
+        "title": "Circuits grow linearly as the grid grows",
+        "body": "The DSL picks a block encoding that uses the matrix structure (banded Toeplitz). Each extra grid qubit adds about 820 gates to the DSL circuit, while loading the whole matrix as one unitary multiplies its CX count by about 4.7."
+      },
+      {
+        "id": "vqe",
+        "title": "Variational loops run inside a session",
+        "body": "Each iteration submits the objective and its gradient evaluations as one job. The session records iterations in order to build the convergence curve, and the same curve is shown on the web."
+      }
+    ],
+    "compare": {
+      "dslLabel": "Qbasis DSL",
+      "dslNote": "You decide: the matrix A, the function f, and the block-encoding kind",
+      "sdkLabel": "Hand-built with a general-purpose quantum SDK",
+      "sdkItems": [
+        "Block-encoding construction (dilation formula, ancilla placement)",
+        "Chebyshev truncation degree and parity",
+        "|P| ≤ 1 normalization",
+        "Phase-factor convention conversion",
+        "Signs in the real-part gadget",
+        "U and U† alternation order",
+        "Little-endian index handling"
+      ]
+    },
+    "scaling": {
+      "caption": "Circuit-size growth, normalized to 1 at n = 3 grid qubits",
+      "seriesDsl": "Qbasis DSL (sparse_lcu, total gates)",
+      "seriesDense": "Whole-matrix loading (CX per block-encoding call)"
+    },
+    "vqe": {
+      "codeFile": "vqe_session.py",
+      "chartTitle": "Convergence curve",
+      "chartCaption": "H = Z with an ry(θ) ansatz. θ₀ = 0.1, learning rate 0.5, 12 iterations. The minimum is ⟨Z⟩ = −1 at θ = π",
+      "axisX": "Iteration",
+      "axisY": "⟨Z⟩"
+    }
+  },
+  "measured": {
+    "eyebrow": "Measured",
+    "title": "We publish what we measured",
+    "tiles": {
+      "fidelityLabel": "Circuit fidelity",
+      "fidelityBody": "Agreement Σ√(p·q) between the GPU simulator's 32,768-shot distribution and the numerical target f(A)b. Identical distributions score 1.",
+      "dslLabel": "DSL circuit growth per qubit",
+      "dslUnit": "gates",
+      "dslBody": "Total gates at 3, 4, and 5 grid qubits",
+      "denseLabel": "Whole-matrix loading growth per qubit",
+      "denseUnit": "CX",
+      "denseBody": "CX count of one block-encoding unitary for the same problem"
+    },
+    "quote": "We do not claim quantum advantage. We build the toolchain so the code is already there when the hardware is ready.",
+    "quoteBy": "Qbasis.One principles",
+    "footnote": "Measured in-house in August 2026 on one step of an implicit Black–Scholes FDM (8 grid points) solved with a QSVT regularized inverse. The comparison is the same problem assembled by hand from a general-purpose quantum SDK's gates."
+  },
+  "principles": {
+    "eyebrow": "Principles",
+    "title": "A toolchain without the hype",
+    "items": [
+      {
+        "title": "No quantum-advantage claims",
+        "body": "The example circuits are beyond what today's NISQ hardware runs. What we provide is the code and the pipeline from problem definition to execution."
+      },
+      {
+        "title": "Verification ships with results",
+        "body": "Simulator results are checked against the classical solution. Error and post-selection success rate go into the results table as measured."
+      },
+      {
+        "title": "Same submission, same result",
+        "body": "Every submission carries a reproducible key. Sending the same submission again returns the earlier result instead of running it twice."
+      }
+    ]
+  },
+  "cta": {
+    "title": "When the hardware is ready, the code is already there",
+    "body": "Preview access and adoption inquiries are handled by email.",
+    "button": "Contact us"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Frequently asked questions",
+    "items": [
+      {
+        "q": "Can I use it today?",
+        "a": "It is not a public service yet. Email us if you would like to join the preview."
+      },
+      {
+        "q": "Do I need to know quantum circuits?",
+        "a": "If you can define the problem as a matrix and a function, you can call the synthesis functions. The one argument that picks the block encoding follows from the matrix structure."
+      },
+      {
+        "q": "Which backends does it run on?",
+        "a": "Today it runs on our own GPU simulator. Quantum hardware (QPU) access is being prepared behind the same submission format."
+      },
+      {
+        "q": "How is it different from a general-purpose quantum SDK?",
+        "a": "General-purpose SDKs assemble circuits gate by gate. The Qbasis DSL takes a problem definition such as a matrix, a function, or an observable, synthesizes the circuit, and carries it through submission and result retrieval."
+      },
+      {
+        "q": "What does Qbasis.One offer?",
+        "a": "A quantum DSL, execution middleware, and an adoption service that brings a quantum computing environment into your organization."
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "A development environment for quantum software",
+    "rights": "All rights reserved."
+  }
+}

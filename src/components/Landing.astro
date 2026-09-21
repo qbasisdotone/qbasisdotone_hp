@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "./Header.astro";
+import Hero from "./Hero.astro";
+import Platform from "./Platform.astro";
+import Features from "./Features.astro";
+import Measured from "./Measured.astro";
+import Principles from "./Principles.astro";
+import Closing from "./Closing.astro";
+import type { Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+---
+
+<Base locale={locale}>
+  <Header locale={locale} />
+  <main>
+    <Hero locale={locale} />
+    <Platform locale={locale} />
+    <Features locale={locale} />
+    <Measured locale={locale} />
+    <Principles locale={locale} />
+  </main>
+  <Closing locale={locale} />
+</Base>

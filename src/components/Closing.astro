@@ -1,0 +1,129 @@
+---
+import { asset, homeOf, site, t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = t(locale);
+const mailto = `mailto:${site.contactEmail}`;
+const year = new Date().getFullYear();
+---
+
+<section class="cta qb-dark">
+  <div class="container cta__inner">
+    <span class="qb-ket cta__ket" aria-hidden="true">|ψ⟩</span>
+    <h2 class="cta__title">{copy.cta.title}</h2>
+    <p class="cta__body">{copy.cta.body}</p>
+    <a class="btn btn--primary btn--lg" href={mailto}>{copy.cta.button}</a>
+  </div>
+</section>
+
+<section class="section" id="faq">
+  <div class="container faq">
+    <div class="faq__head">
+      <span class="eyebrow">{copy.faq.eyebrow}</span>
+      <h2 class="section-title">{copy.faq.title}</h2>
+    </div>
+    <div class="faq__list">
+      {
+        copy.faq.items.map((item, i) => (
+          <details open={i === 0}>
+            <summary>{item.q}</summary>
+            <p>{item.a}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<footer class="footer qb-dark">
+  <div class="container footer__inner">
+    <div>
+      <img src={asset(site.images.logoOnDark)} alt={site.company} width="160" height="35" class="footer__logo" />
+      <p class="footer__tagline">{copy.footer.tagline}</p>
+    </div>
+    <nav class="footer__nav" aria-label="Footer">
+      {copy.nav.items.map((item) => <a href={item.href}>{item.label}</a>)}
+      <a href={mailto}>{site.contactEmail}</a>
+    </nav>
+    <div class="footer__bottom">
+      <span>© {year} {site.company}. {copy.footer.rights}</span>
+      <span class="footer__lang">
+        <a href={homeOf("ko")} aria-current={locale === "ko" ? "page" : undefined}>KOR</a>
+        <span aria-hidden="true">|</span>
+        <a href={homeOf("en")} aria-current={locale === "en" ? "page" : undefined}>EN</a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .cta {
+    position: relative; overflow: hidden;
+    background-color: var(--ink-950);
+    background-image: var(--lattice-dark);
+    background-size: 22px 22px;
+  }
+  .cta::after {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(700px 360px at 50% 120%, rgba(37, 102, 222, 0.35), transparent 65%);
+  }
+  .cta__inner { position: relative; z-index: 1; text-align: center; padding-block: var(--space-14); }
+  .cta__ket { font-size: var(--text-2xl); }
+  .cta__title {
+    margin: var(--space-5) auto 0;
+    max-width: 760px;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: clamp(2rem, 1.2rem + 2.6vw, var(--text-3xl));
+    line-height: var(--leading-tight);
+    letter-spacing: var(--tracking-tight);
+  }
+  .cta__body { margin: var(--space-5) auto var(--space-9); color: var(--text-muted); font-size: var(--text-md); }
+
+  .faq { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: var(--space-10); }
+  .faq__head .section-title { margin-top: var(--space-5); }
+  .faq__list { border-top: 1px solid var(--border); }
+  details { border-bottom: 1px solid var(--border); }
+  summary {
+    list-style: none;
+    display: flex; justify-content: space-between; align-items: center; gap: var(--space-6);
+    padding: var(--space-7) 0;
+    cursor: pointer;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: var(--text-lg);
+    color: var(--text-strong);
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font: 400 var(--text-xl) / 1 var(--font-mono); color: var(--brand); transition: transform var(--dur-base) var(--ease-out); }
+  details[open] summary::after { transform: rotate(45deg); }
+  details p { margin: 0; padding: 0 0 var(--space-7); max-width: 64ch; line-height: var(--leading-normal); color: var(--text-muted); }
+
+  .footer { background: var(--ink-950); color: var(--text-muted); }
+  .footer__inner {
+    display: grid; grid-template-columns: 1fr auto; gap: var(--space-9) var(--space-10);
+    padding-block: var(--space-11) var(--space-8);
+  }
+  .footer__logo { height: 28px; width: auto; }
+  .footer__tagline { margin: var(--space-5) 0 0; font-size: var(--text-sm); }
+  .footer__nav { display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-7); align-content: start; }
+  .footer__nav a, .footer__lang a { color: var(--text-body); font-size: var(--text-sm); }
+  .footer__bottom {
+    grid-column: 1 / -1;
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: var(--space-4);
+    padding-top: var(--space-7);
+    border-top: 1px solid var(--border);
+    font: var(--fw-regular) var(--text-xs) / 1.4 var(--font-mono);
+  }
+  .footer__lang { display: flex; gap: 6px; }
+  .footer__lang a { font: inherit; color: var(--text-muted); }
+  .footer__lang a[aria-current="page"] { color: var(--text-strong); font-weight: var(--fw-bold); }
+
+  @media (max-width: 900px) {
+    .faq { grid-template-columns: 1fr; gap: var(--space-8); }
+    .footer__inner { grid-template-columns: 1fr; }
+  }
+</style>

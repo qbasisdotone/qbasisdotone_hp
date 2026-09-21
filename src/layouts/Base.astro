@@ -1,0 +1,45 @@
+---
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+import "@fontsource/jetbrains-mono/400.css";
+import "@fontsource/jetbrains-mono/500.css";
+import "@fontsource/nanum-gothic/400.css";
+import "@fontsource/nanum-gothic/700.css";
+import "@fontsource/nanum-gothic/800.css";
+import "../styles/global.css";
+import { asset, homeOf, site, t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = t(locale);
+const canonical = Astro.site ? new URL(homeOf(locale), Astro.site).href : undefined;
+const alternates = (["ko", "en"] as const).map((l) => ({
+  hreflang: l,
+  href: Astro.site ? new URL(homeOf(l), Astro.site).href : homeOf(l),
+}));
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{copy.meta.title}</title>
+    <meta name="description" content={copy.meta.description} />
+    <link rel="icon" type="image/svg+xml" href={asset(site.images.favicon)} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.href} />)}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={copy.meta.title} />
+    <meta property="og:description" content={copy.meta.description} />
+    <meta property="og:locale" content={locale === "ko" ? "ko_KR" : "en_US"} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

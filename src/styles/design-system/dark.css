@@ -1,0 +1,149 @@
+/* ============================================================
+   Qbasis.One — Dark theme
+   Opt in with [data-theme="dark"] on <html>/<body>, or scope a
+   region with class .qb-dark. Same semantic aliases, dark values —
+   components need no changes to work in dark.
+   ============================================================ */
+
+[data-theme="dark"], .qb-dark {
+  /* ---- Brand steps: lifted one/two stops for contrast on dark ---- */
+  --brand:           var(--blue-400);
+  --brand-hover:     var(--blue-300);
+  --brand-active:    var(--blue-200);
+  --brand-subtle:    #1d2d4c;      /* blue-tinted ink */
+  --brand-on:        var(--ink-950);
+  --accent:          var(--cyan-300);
+  --accent-strong:   var(--cyan-200);
+  --accent-subtle:   #123745;
+
+  /* ---- Text ---- */
+  --text-strong:     var(--ink-25);
+  --text-body:       var(--ink-100);
+  --text-muted:      var(--ink-300);
+  --text-subtle:     var(--ink-400);
+  --text-inverse:    var(--ink-950);
+  --text-link:       var(--blue-300);
+  --text-on-brand:   var(--ink-950);
+
+  /* ---- Surfaces ---- */
+  --surface-page:    var(--ink-950);
+  --surface-card:    var(--ink-900);
+  --surface-sunken:  #080b10;
+  --surface-raised:  var(--ink-850);
+  --surface-hover:   var(--ink-800);
+  --surface-inset:   var(--ink-850);
+
+  /* ---- Borders & lines ---- */
+  --border:          var(--ink-800);
+  --border-strong:   var(--ink-700);
+  --border-focus:    var(--blue-400);
+  --divider:         var(--ink-800);
+
+  /* ---- Status: brighter face, deep tinted grounds ---- */
+  --success:         var(--green-400);
+  --success-subtle:  #14402f;
+  --warning:         var(--amber-400);
+  --warning-subtle:  #40301a;
+  --danger:          var(--red-400);
+  --danger-subtle:   #452127;
+  --info:            var(--blue-400);
+  --info-subtle:     #21355c;
+
+  /* ---- Focus ring ---- */
+  --ring:            color-mix(in srgb, var(--blue-400) 45%, transparent);
+
+  /* ---- Elevation: dark needs depth, not opacity ---- */
+  --shadow-xs:  0 1px 2px rgba(0,0,0,0.40);
+  --shadow-sm:  0 1px 3px rgba(0,0,0,0.50), 0 1px 2px rgba(0,0,0,0.30);
+  --shadow-md:  0 4px 14px rgba(0,0,0,0.55), 0 2px 4px rgba(0,0,0,0.35);
+  --shadow-lg:  0 14px 32px rgba(0,0,0,0.60), 0 4px 8px rgba(0,0,0,0.40);
+  --shadow-xl:  0 26px 60px rgba(0,0,0,0.68), 0 8px 16px rgba(0,0,0,0.45);
+  --glow-brand: 0 0 0 1px rgba(96,160,240,0.28), 0 6px 26px rgba(61,130,238,0.38);
+  --glow-cyan:  0 0 26px rgba(79,214,238,0.42);
+
+  /* Console tokens equal the page surfaces in dark — code and UI agree */
+  --console-bg:      var(--ink-950);
+  --console-panel:   var(--ink-900);
+  --console-raised:  var(--ink-850);
+  --console-border:  var(--ink-800);
+  --console-text:    var(--ink-100);
+  --console-muted:   var(--ink-400);
+
+  color-scheme: dark;
+}
+
+/* ============================================================
+   Component corrections
+   Only for places where light values were hardcoded rather than
+   drawn from a semantic alias.
+   ============================================================ */
+
+[data-theme="dark"] ::selection, .qb-dark ::selection { background: var(--blue-800); color: var(--ink-25); }
+
+/* Buttons — accent fill keeps dark ink; secondary borrows raised surface */
+[data-theme="dark"] .qb-btn--secondary, .qb-dark .qb-btn--secondary { background: var(--ink-800); color: var(--ink-25); border-color: var(--ink-600); }
+[data-theme="dark"] .qb-btn--secondary:hover, .qb-dark .qb-btn--secondary:hover { background: var(--ink-700); border-color: var(--ink-500); }
+[data-theme="dark"] .qb-btn--ghost, .qb-dark .qb-btn--ghost { color: var(--ink-100); border-color: var(--ink-600); }
+[data-theme="dark"] .qb-btn--ghost:hover, .qb-dark .qb-btn--ghost:hover { border-color: var(--ink-500); }
+[data-theme="dark"] .qb-btn--accent, .qb-dark .qb-btn--accent { background: var(--cyan-300); color: var(--ink-950); }
+[data-theme="dark"] .qb-btn--accent:hover, .qb-dark .qb-btn--accent:hover { background: var(--cyan-200); color: var(--ink-950); }
+[data-theme="dark"] .qb-btn--link, .qb-dark .qb-btn--link { color: var(--blue-200); }
+[data-theme="dark"] .qb-btn--danger, .qb-dark .qb-btn--danger { color: var(--ink-950); }
+
+/* Inputs & select */
+[data-theme="dark"] .qb-input, .qb-dark .qb-input,
+[data-theme="dark"] .qb-select, .qb-dark .qb-select { background-color: var(--surface-sunken); }
+[data-theme="dark"] .qb-input:hover, .qb-dark .qb-input:hover,
+[data-theme="dark"] .qb-select:hover, .qb-dark .qb-select:hover { border-color: var(--ink-600); }
+[data-theme="dark"] .qb-select, .qb-dark .qb-select {
+  background-repeat: no-repeat; background-position: right 12px center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239aa4b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+}
+
+/* Badges */
+[data-theme="dark"] .qb-badge--neutral, .qb-dark .qb-badge--neutral { background: var(--ink-800); color: var(--ink-100); border-color: var(--ink-600); }
+[data-theme="dark"] .qb-badge--brand, .qb-dark .qb-badge--brand { background: var(--brand-subtle); color: var(--blue-200); border-color: #2e4573; }
+[data-theme="dark"] .qb-badge--accent, .qb-dark .qb-badge--accent { background: #123745; color: var(--cyan-200); border-color: #1a5567; }
+[data-theme="dark"] .qb-badge--success, .qb-dark .qb-badge--success { background: #14402f; color: #a5f0d0; border-color: #256349; }
+[data-theme="dark"] .qb-badge--warning, .qb-dark .qb-badge--warning { background: #40301a; color: #fbe1ac; border-color: #6a501e; }
+[data-theme="dark"] .qb-badge--danger, .qb-dark .qb-badge--danger { background: #452127; color: #fbc9c9; border-color: #74343c; }
+[data-theme="dark"] .qb-badge--solid, .qb-dark .qb-badge--solid { background: var(--brand); color: var(--ink-950); }
+
+/* Tag */
+[data-theme="dark"] .qb-tag, .qb-dark .qb-tag { background: var(--ink-850); color: var(--ink-200); border-color: var(--ink-700); }
+[data-theme="dark"] .qb-tag-x:hover, .qb-dark .qb-tag-x:hover { background: var(--ink-700); color: var(--ink-25); }
+
+/* Alerts — tinted ground, bright ink */
+[data-theme="dark"] .qb-alert--info, .qb-dark .qb-alert--info { background: var(--info-subtle); border-color: #33497a; color: var(--blue-100); }
+[data-theme="dark"] .qb-alert--success, .qb-dark .qb-alert--success { background: var(--success-subtle); border-color: #256349; color: #a5f0d0; }
+[data-theme="dark"] .qb-alert--warning, .qb-dark .qb-alert--warning { background: var(--warning-subtle); border-color: #6a501e; color: #fbe1ac; }
+[data-theme="dark"] .qb-alert--danger, .qb-dark .qb-alert--danger { background: var(--danger-subtle); border-color: #74343c; color: #fbc9c9; }
+
+/* Switch / checkbox */
+[data-theme="dark"] .qb-switch-track, .qb-dark .qb-switch-track { background: var(--ink-700); }
+[data-theme="dark"] .qb-switch-thumb, .qb-dark .qb-switch-thumb { background: var(--ink-100); }
+[data-theme="dark"] .qb-switch input:checked + .qb-switch-track .qb-switch-thumb,
+.qb-dark .qb-switch input:checked + .qb-switch-track .qb-switch-thumb { background: var(--ink-950); }
+[data-theme="dark"] .qb-check-box, .qb-dark .qb-check-box { background: var(--surface-sunken); color: var(--ink-950); }
+
+/* Card variants */
+[data-theme="dark"] .qb-card--dark, .qb-dark .qb-card--dark { background: var(--surface-raised); }
+
+/* Avatar */
+[data-theme="dark"] .qb-avatar, .qb-dark .qb-avatar { background: var(--brand-subtle); color: var(--blue-200); }
+
+/* Kbd */
+[data-theme="dark"] .qb-kbd, .qb-dark .qb-kbd { background: var(--surface-raised); color: var(--ink-100); border-color: var(--ink-700); }
+
+/* Tooltip — inverts to a light chip so it still reads as an overlay */
+[data-theme="dark"] .qb-tooltip, .qb-dark .qb-tooltip { background: var(--ink-100); color: var(--ink-950); }
+[data-theme="dark"] .qb-tooltip::after, .qb-dark .qb-tooltip::after { border-top-color: var(--ink-100); }
+
+/* CodeBlock — sits on a raised panel so it separates from the page */
+[data-theme="dark"] .qb-code, .qb-dark .qb-code { background: var(--surface-sunken); }
+
+/* Circuit diagram */
+[data-theme="dark"] .qb-circuit-wire::before, .qb-dark .qb-circuit-wire::before { background: var(--ink-600); }
+[data-theme="dark"] .qb-gate, .qb-dark .qb-gate { background: var(--surface-raised); border-color: var(--blue-400); color: var(--blue-300); }
+[data-theme="dark"] .qb-gate--ctrl, .qb-dark .qb-gate--ctrl { background: var(--blue-400); }
+[data-theme="dark"] .qb-gate--measure, .qb-dark .qb-gate--measure { border-color: var(--violet-400); color: var(--violet-400); }

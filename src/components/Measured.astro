@@ -1,0 +1,106 @@
+---
+import { site, t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = t(locale).measured;
+const m = site.measured;
+const num = new Intl.NumberFormat(locale === "ko" ? "ko-KR" : "en-US");
+
+// Per-qubit growth from the measured series: mean step for the DSL, mean ratio for whole-matrix loading.
+const steps = m.dslGates.slice(1).map((g, i) => g - m.dslGates[i]);
+const dslStep = Math.round(steps.reduce((a, b) => a + b, 0) / steps.length / 10) * 10;
+const ratios = m.denseBlockEncodingCx.slice(1).map((c, i) => c / m.denseBlockEncodingCx[i]);
+const denseRatio = Math.pow(ratios.reduce((a, b) => a * b, 1), 1 / ratios.length);
+---
+
+<section class="section" id="measured">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{copy.eyebrow}</span>
+      <h2 class="section-title">{copy.title}</h2>
+    </div>
+
+    <div class="bento">
+      <article class="tile tile--hero graph">
+        <p class="tile__label">{copy.tiles.fidelityLabel}</p>
+        <p class="tile__big">{m.fidelity}</p>
+        <p class="tile__body">{copy.tiles.fidelityBody}</p>
+      </article>
+
+      <article class="tile tile--quote">
+        <span class="qb-ket tile__ket" aria-hidden="true">|ψ⟩</span>
+        <blockquote>{copy.quote}</blockquote>
+        <p class="tile__by">{copy.quoteBy}</p>
+      </article>
+
+      <article class="tile graph graph--cyan">
+        <p class="tile__label">{copy.tiles.dslLabel}</p>
+        <p class="tile__big">+{num.format(dslStep)}<small>{copy.tiles.dslUnit}</small></p>
+        <p class="tile__body">{copy.tiles.dslBody}</p>
+        <p class="tile__series">{m.dslGates.map((g) => num.format(g)).join(" → ")}</p>
+      </article>
+
+      <article class="tile graph graph--ink">
+        <p class="tile__label">{copy.tiles.denseLabel}</p>
+        <p class="tile__big">×{denseRatio.toFixed(1)}<small>{copy.tiles.denseUnit}</small></p>
+        <p class="tile__body">{copy.tiles.denseBody}</p>
+        <p class="tile__series">{m.denseBlockEncodingCx.map((c) => num.format(c)).join(" → ")}</p>
+      </article>
+    </div>
+
+    <p class="footnote">* {copy.footnote}</p>
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: var(--space-6);
+  }
+  .tile {
+    display: flex; flex-direction: column;
+    padding: var(--space-8);
+    border-radius: var(--radius-sm);
+    min-height: 260px;
+  }
+  .tile--hero { grid-column: span 7; }
+  .tile--quote { grid-column: span 5; background: var(--ink-950); color: var(--ink-100); }
+  .tile:nth-child(3), .tile:nth-child(4) { grid-column: span 6; }
+
+  .tile__label { margin: 0; font: var(--fw-medium) var(--text-sm) / 1.3 var(--font-sans); color: var(--text-body); }
+  .tile__big {
+    margin: auto 0 0;
+    padding-top: var(--space-7);
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: clamp(2.75rem, 1.8rem + 3.4vw, 4.5rem);
+    line-height: 1;
+    letter-spacing: var(--tracking-tighter);
+    color: var(--graph-ink);
+  }
+  .tile__big small { margin-left: 8px; font: var(--fw-medium) var(--text-md) / 1 var(--font-mono); letter-spacing: 0; color: var(--text-muted); }
+  .tile__body { margin: var(--space-5) 0 0; font-size: var(--text-sm); line-height: var(--leading-normal); color: var(--text-body); max-width: 46ch; }
+  .tile__series { margin: var(--space-3) 0 0; font: var(--fw-medium) var(--text-sm) / 1.3 var(--font-mono); color: var(--text-strong); }
+
+  .tile__ket { font-size: var(--text-2xl); color: var(--cyan-300); }
+  .tile--quote blockquote {
+    margin: var(--space-7) 0 0;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+    color: var(--ink-25);
+  }
+  .tile__by { margin: auto 0 0; padding-top: var(--space-6); font: var(--fw-regular) var(--text-xs) / 1 var(--font-mono); color: var(--ink-400); }
+
+  .footnote { margin: var(--space-7) 0 0; font-size: var(--text-xs); line-height: var(--leading-normal); color: var(--text-muted); max-width: 820px; }
+
+  @media (max-width: 900px) {
+    .tile--hero, .tile--quote, .tile:nth-child(3), .tile:nth-child(4) { grid-column: 1 / -1; }
+    .tile { padding: var(--space-7); min-height: 0; }
+  }
+</style>

@@ -1,0 +1,22 @@
+{
+  "company": "Qbasis.One",
+  "contactEmail": "qasis@qbasis.one",
+  "images": {
+    "logo": "brand/logo.svg",
+    "logoOnDark": "brand/logo-dark.svg",
+    "favicon": "brand/favicon.svg",
+    "ogImage": "brand/logo.svg"
+  },
+  "measured": {
+    "fidelity": 0.999917,
+    "shots": 32768,
+    "gridQubits": [3, 4, 5],
+    "dslGates": [6182, 6986, 7822],
+    "denseBlockEncodingCx": [81, 393, 1783]
+  },
+  "vqe": {
+    "theta0": 0.1,
+    "learningRate": 0.5,
+    "iterations": 12
+  }
+}

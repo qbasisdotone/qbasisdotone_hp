@@ -1,0 +1,69 @@
+/* ============================================================
+   Qbasis.One — Spacing, radius, shadow, motion, layout
+   8px base grid. Tight, engineered rhythm.
+   ============================================================ */
+
+:root {
+  /* ---- Spacing scale (8px grid + half steps) ---- */
+  --space-0:   0;
+  --space-1:   2px;
+  --space-2:   4px;
+  --space-3:   8px;
+  --space-4:   12px;
+  --space-5:   16px;
+  --space-6:   20px;
+  --space-7:   24px;
+  --space-8:   32px;
+  --space-9:   40px;
+  --space-10:  48px;
+  --space-11:  64px;
+  --space-12:  80px;
+  --space-13:  96px;
+  --space-14:  128px;
+
+  /* ---- Radius ---- */
+  --radius-xs:   3px;
+  --radius-sm:   5px;
+  --radius-md:   8px;   /* default control/card */
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-2xl:  24px;
+  --radius-pill: 999px;
+
+  /* ---- Border widths ---- */
+  --bw-hair: 1px;   /* @kind other */
+  --bw:      1.5px; /* @kind other */
+  --bw-bold: 2px;   /* @kind other */
+
+  /* ---- Shadows (cool, low-spread, engineered) ---- */
+  --shadow-xs:  0 1px 2px rgba(11,14,20,0.06);
+  --shadow-sm:  0 1px 3px rgba(11,14,20,0.08), 0 1px 2px rgba(11,14,20,0.04);
+  --shadow-md:  0 4px 12px rgba(11,14,20,0.08), 0 2px 4px rgba(11,14,20,0.04);
+  --shadow-lg:  0 12px 28px rgba(11,14,20,0.12), 0 4px 8px rgba(11,14,20,0.05);
+  --shadow-xl:  0 24px 56px rgba(11,14,20,0.16), 0 8px 16px rgba(11,14,20,0.06);
+  /* Glow — quantum accent on interactive/brand elements */
+  --glow-brand: 0 0 0 1px rgba(37,102,222,0.10), 0 6px 22px rgba(37,102,222,0.22);
+  --glow-cyan:  0 0 24px rgba(16,172,224,0.35);
+
+  /* ---- Motion ---- */
+  --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);    /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* @kind other */
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);/* @kind other */
+  --dur-fast:    120ms;  /* @kind other */
+  --dur-base:    200ms;  /* @kind other */
+  --dur-slow:    360ms;  /* @kind other */
+
+  /* ---- Layout ---- */
+  --container:   1200px;
+  --container-wide: 1440px;
+  --gutter:      var(--space-7);
+  --header-h:    64px;
+
+  /* ---- Z-index ---- */
+  --z-base: 0;       /* @kind other */
+  --z-raised: 10;    /* @kind other */
+  --z-sticky: 100;   /* @kind other */
+  --z-overlay: 1000; /* @kind other */
+  --z-modal: 1100;   /* @kind other */
+  --z-toast: 1200;   /* @kind other */
+}

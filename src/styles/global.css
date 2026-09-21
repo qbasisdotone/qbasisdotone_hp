@@ -1,0 +1,147 @@
+/* Design-system tokens, copied unchanged from the Qbasis.One Design System artifact.
+   Re-copy these files to pick up token changes; site-specific rules live below. */
+@import "./design-system/colors.css";
+@import "./design-system/typography.css";
+@import "./design-system/layout.css";
+@import "./design-system/base.css";
+@import "./design-system/dark.css";
+
+/* ---- Fonts ------------------------------------------------------------
+   The design-system faces have no Hangul glyphs, so Nanum Gothic follows
+   each Latin face in the stack and supplies Korean characters only. */
+:root {
+  --font-hangul: "Nanum Gothic";
+  --font-display: "Space Grotesk", var(--font-hangul), system-ui, sans-serif;
+  --font-sans: "IBM Plex Sans", var(--font-hangul), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", var(--font-hangul), ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Nanum Gothic ships 400/700/800 only, so a 500 headline renders Hangul at 400 next to
+     Space Grotesk 500. Korean pages set display type at 600 so Hangul resolves to 700. */
+  --fw-display: var(--fw-medium);
+
+  --lattice-light: radial-gradient(var(--ink-200) 1px, transparent 1px);
+  --lattice-dark: radial-gradient(rgba(96, 160, 240, 0.14) 1px, transparent 1px);
+}
+
+html { scroll-behavior: smooth; scroll-padding-top: calc(var(--header-h) + 16px); }
+body { background: var(--white); overflow-x: hidden; }
+:lang(ko) { word-break: keep-all; overflow-wrap: break-word; --fw-display: var(--fw-semibold); }
+img, svg { display: block; max-width: 100%; }
+h1, h2, h3, summary, blockquote { text-wrap: balance; }
+:focus-visible { outline: 3px solid var(--ring); outline-offset: 2px; border-radius: var(--radius-sm); }
+
+.container { width: 100%; max-width: var(--container); margin-inline: auto; padding-inline: var(--gutter); }
+@media (max-width: 640px) { .container { padding-inline: 16px; } }
+
+.section { padding-block: var(--space-14); }
+@media (max-width: 900px) { .section { padding-block: var(--space-12); } }
+
+/* Eyebrow: mono kicker on a highlight chip, the Jasper-style marker. */
+.eyebrow {
+  display: inline-block;
+  font: var(--fw-medium) var(--text-xs) / 1 var(--font-mono);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--cyan-700);
+  background: var(--cyan-50);
+  padding: 6px 8px;
+  border-radius: var(--radius-xs);
+}
+.qb-dark .eyebrow { color: var(--cyan-200); background: rgba(16, 172, 224, 0.14); }
+
+.section-head { text-align: center; max-width: 760px; margin: 0 auto var(--space-11); }
+.section-title {
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: clamp(2rem, 1.2rem + 2.6vw, var(--text-3xl));
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--text-strong);
+  margin-top: var(--space-5);
+}
+.section-lead {
+  font-size: var(--text-md);
+  line-height: var(--leading-normal);
+  color: var(--text-muted);
+  margin: var(--space-5) auto 0;
+  max-width: 620px;
+}
+
+/* ---- Buttons ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  height: 44px; padding: 0 20px;
+  font: var(--fw-medium) var(--text-base) / 1 var(--font-sans);
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  text-decoration: none !important;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast), box-shadow var(--dur-base), transform var(--dur-fast);
+  white-space: nowrap;
+}
+.btn:active { transform: scale(0.98); }
+.btn--primary { background: var(--brand); color: var(--brand-on); box-shadow: var(--glow-brand); }
+.btn--primary:hover { background: var(--brand-hover); }
+.btn--secondary { background: var(--white); color: var(--text-strong); border-color: var(--ink-950); }
+.btn--secondary:hover { background: var(--surface-hover); }
+.btn--sm { height: 38px; padding: 0 16px; font-size: var(--text-sm); }
+.btn--lg { height: 52px; padding: 0 26px; }
+
+/* ---- Graph-paper texture (Jasper's grid, in design-system colors) ---- */
+.graph {
+  --graph-line: var(--blue-200);
+  --graph-bg: var(--blue-50);
+  --graph-ink: var(--blue-600);
+  background-color: var(--graph-bg);
+  background-image:
+    linear-gradient(var(--graph-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--graph-line) 1px, transparent 1px);
+  background-size: 16px 16px;
+  background-position: -1px -1px;
+}
+.graph--cyan { --graph-line: var(--cyan-200); --graph-bg: var(--cyan-50); --graph-ink: var(--cyan-600); }
+.graph--ink { --graph-line: var(--ink-200); --graph-bg: var(--ink-50); --graph-ink: var(--ink-600); }
+
+/* ---- Code (Shiki css-variables theme) ---- */
+.code-window {
+  background: var(--console-bg);
+  border: 1px solid var(--console-border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-xl);
+  text-align: left;
+}
+.code-window__bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--console-border);
+  background: var(--console-panel);
+  font: var(--fw-regular) var(--text-xs) / 1 var(--font-mono);
+  color: var(--console-muted);
+}
+.code-window__dots { display: flex; gap: 6px; margin-right: 6px; }
+.code-window__dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--ink-700); }
+.code-window pre.astro-code {
+  --astro-code-foreground: var(--ink-100);
+  --astro-code-background: transparent;
+  --astro-code-token-keyword: var(--blue-300);
+  --astro-code-token-function: var(--cyan-300);
+  --astro-code-token-string: #a5f0d0;
+  --astro-code-token-string-expression: #a5f0d0;
+  --astro-code-token-constant: var(--amber-400);
+  --astro-code-token-comment: var(--ink-400);
+  --astro-code-token-parameter: var(--ink-100);
+  --astro-code-token-punctuation: var(--ink-300);
+  --astro-code-token-link: var(--blue-300);
+  margin: 0;
+  padding: 20px 20px 22px;
+  background: transparent !important;
+  font: var(--fw-regular) 13.5px / 1.7 var(--font-mono);
+  overflow-x: auto;
+}
+.code-window pre.astro-code code { font-family: inherit; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; }
+}

@@ -1,0 +1,273 @@
+---
+import { Code } from "astro:components";
+import { code, site, t, type Locale } from "../lib/i18n";
+
+interface Props {
+  locale: Locale;
+}
+const { locale } = Astro.props;
+const copy = t(locale).features;
+const snip = code(locale);
+const fmt = new Intl.NumberFormat(locale === "ko" ? "ko-KR" : "en-US", { maximumFractionDigits: 2, minimumFractionDigits: 2 });
+
+// ---- Scaling chart: growth relative to n = 3, from the measured counts in site.json ----
+const m = site.measured;
+const ratio = (xs: number[]) => xs.map((x) => x / xs[0]);
+const dsl = ratio(m.dslGates);
+const dense = ratio(m.denseBlockEncodingCx);
+const S = { w: 560, h: 300, left: 44, right: 12, top: 28, bottom: 36 };
+const yMax = Math.ceil(Math.max(...dense) / 5) * 5;
+const plotH = S.h - S.top - S.bottom;
+const groupW = (S.w - S.left - S.right) / m.gridQubits.length;
+const barW = 44;
+const y = (v: number) => S.top + plotH * (1 - v / yMax);
+const yTicks = Array.from({ length: yMax / 5 + 1 }, (_, i) => i * 5);
+
+// ---- VQE curve: the example's own update rule, E(θ) = cos θ, θ ← θ − lr·(−sin θ) ----
+const v = site.vqe;
+const energies: number[] = [];
+let theta = v.theta0;
+for (let i = 0; i < v.iterations; i++) {
+  energies.push(Math.cos(theta));
+  theta -= v.learningRate * -Math.sin(theta);
+}
+const C = { w: 560, h: 220, left: 40, right: 12, top: 30, bottom: 30 };
+const cx = (i: number) => C.left + ((C.w - C.left - C.right) * i) / (v.iterations - 1);
+const cy = (e: number) => C.top + ((C.h - C.top - C.bottom) * (1 - e)) / 2;
+const curvePath = energies.map((e, i) => `${i ? "L" : "M"}${cx(i).toFixed(1)},${cy(e).toFixed(1)}`).join(" ");
+---
+
+<section class="section features qb-dark" id="dsl">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow">{copy.eyebrow}</span>
+      <h2 class="section-title">{copy.title}</h2>
+      <p class="section-lead">{copy.body}</p>
+    </div>
+
+    <div class="tabs" data-tabs>
+      <div class="tabs__list" role="tablist" aria-orientation="vertical">
+        {
+          copy.items.map((item, i) => (
+            <button
+              class="tab"
+              role="tab"
+              id={`tab-${item.id}`}
+              aria-controls={`panel-${item.id}`}
+              aria-selected={i === 0 ? "true" : "false"}
+              tabindex={i === 0 ? 0 : -1}
+            >
+              <span class="tab__title">{item.title}</span>
+              <span class="tab__body">{item.body}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="tabs__panels">
+        <div class="panel" role="tabpanel" id="panel-compare" aria-labelledby="tab-compare">
+          <div class="compare">
+            <div class="compare__dsl">
+              <p class="panel__label">{copy.compare.dslLabel}</p>
+              <div class="code-window">
+                <Code code={snip.compare.trimEnd()} lang="python" theme="css-variables" />
+              </div>
+              <p class="panel__note">{copy.compare.dslNote}</p>
+            </div>
+            <div class="compare__sdk">
+              <p class="panel__label">{copy.compare.sdkLabel}</p>
+              <ol>
+                {copy.compare.sdkItems.map((s) => <li>{s}</li>)}
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" role="tabpanel" id="panel-scaling" aria-labelledby="tab-scaling" hidden>
+          <figure class="chart">
+            <svg viewBox={`0 0 ${S.w} ${S.h}`} role="img" aria-label={copy.scaling.caption}>
+              {
+                yTicks.map((tk) => (
+                  <g>
+                    <line x1={S.left} x2={S.w - S.right} y1={y(tk)} y2={y(tk)} class="grid" />
+                    <text x={S.left - 8} y={y(tk) + 4} class="tick" text-anchor="end">×{tk}</text>
+                  </g>
+                ))
+              }
+              {
+                m.gridQubits.map((n, i) => {
+                  const gx = S.left + groupW * i + groupW / 2;
+                  return (
+                    <g>
+                      <rect class="bar bar--dsl" x={gx - barW - 3} width={barW} y={y(dsl[i])} height={y(0) - y(dsl[i])} rx="2" />
+                      <text class="val val--dsl" x={gx - barW / 2 - 3} y={y(dsl[i]) - 7} text-anchor="middle">×{fmt.format(dsl[i])}</text>
+                      <rect class="bar bar--dense" x={gx + 3} width={barW} y={y(dense[i])} height={y(0) - y(dense[i])} rx="2" />
+                      <text class="val val--dense" x={gx + barW / 2 + 3} y={y(dense[i]) - 7} text-anchor="middle">×{fmt.format(dense[i])}</text>
+                      <text class="tick" x={gx} y={S.h - 12} text-anchor="middle">n = {n}</text>
+                    </g>
+                  );
+                })
+              }
+            </svg>
+            <figcaption>
+              <span class="legend"><i class="sw sw--dsl"></i>{copy.scaling.seriesDsl}</span>
+              <span class="legend"><i class="sw sw--dense"></i>{copy.scaling.seriesDense}</span>
+              <span class="chart__caption">{copy.scaling.caption}</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="panel" role="tabpanel" id="panel-vqe" aria-labelledby="tab-vqe" hidden>
+          <div class="vqe">
+            <div class="code-window">
+              <div class="code-window__bar">
+                <span class="code-window__dots"><span></span><span></span><span></span></span>
+                {copy.vqe.codeFile}
+              </div>
+              <Code code={snip.vqe.trimEnd()} lang="python" theme="css-variables" />
+            </div>
+            <figure class="chart chart--vqe">
+              <p class="panel__label">{copy.vqe.chartTitle}</p>
+              <svg viewBox={`0 0 ${C.w} ${C.h}`} role="img" aria-label={copy.vqe.chartCaption}>
+                {
+                  [1, 0, -1].map((e) => (
+                    <g>
+                      <line x1={C.left} x2={C.w - C.right} y1={cy(e)} y2={cy(e)} class={e === -1 ? "target" : "grid"} />
+                      <text x={C.left - 8} y={cy(e) + 4} class="tick" text-anchor="end">{e}</text>
+                    </g>
+                  ))
+                }
+                <path d={curvePath} class="curve" />
+                {energies.map((e, i) => <circle cx={cx(i)} cy={cy(e)} r="3.5" class="pt" />)}
+                <text x={C.w - C.right} y={C.h - 8} class="tick" text-anchor="end">{copy.vqe.axisX} →</text>
+                <text x={C.left - 8} y={12} class="tick" text-anchor="end">{copy.vqe.axisY}</text>
+              </svg>
+              <figcaption class="chart__caption">{copy.vqe.chartCaption}</figcaption>
+            </figure>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-tabs]").forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const select = (next: HTMLButtonElement, focus = false) => {
+      tabs.forEach((tab) => {
+        const on = tab === next;
+        tab.setAttribute("aria-selected", String(on));
+        tab.tabIndex = on ? 0 : -1;
+        const panel = document.getElementById(tab.getAttribute("aria-controls")!);
+        if (panel) panel.hidden = !on;
+      });
+      if (focus) next.focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener("click", () => select(tab));
+      tab.addEventListener("keydown", (e) => {
+        const step = e.key === "ArrowDown" || e.key === "ArrowRight" ? 1 : e.key === "ArrowUp" || e.key === "ArrowLeft" ? -1 : 0;
+        if (!step) return;
+        e.preventDefault();
+        select(tabs[(i + step + tabs.length) % tabs.length], true);
+      });
+    });
+  });
+</script>
+
+<style>
+  .features {
+    position: relative;
+    background-color: var(--ink-950);
+    background-image: var(--lattice-dark);
+    background-size: 22px 22px;
+    color: var(--text-body);
+  }
+  .features::before {
+    content: ""; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(800px 420px at 85% 100%, rgba(16, 172, 224, 0.16), transparent 60%);
+  }
+  .features > .container { position: relative; }
+
+  .tabs { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-10); align-items: start; }
+  .tabs__list { display: flex; flex-direction: column; border-top: 1px solid var(--border); }
+  .tab {
+    all: unset;
+    box-sizing: border-box;
+    display: block;
+    padding: var(--space-7) var(--space-5);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background var(--dur-base) var(--ease-out);
+  }
+  .tab:hover { background: var(--surface-hover); }
+  .tab:focus-visible { outline: 3px solid var(--ring); outline-offset: -3px; }
+  .tab__title {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: var(--fw-display);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
+    color: var(--text-muted);
+  }
+  .tab__body { display: none; margin-top: var(--space-4); font-size: var(--text-base); line-height: var(--leading-normal); color: var(--text-body); }
+  .tab[aria-selected="true"] { background: var(--surface-card); box-shadow: inset 0 2px 0 var(--accent); }
+  .tab[aria-selected="true"] .tab__title { color: var(--text-strong); }
+  .tab[aria-selected="true"] .tab__body { display: block; }
+
+  .panel {
+    background: var(--surface-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-8);
+  }
+  .panel__label { margin: 0 0 var(--space-4); font: var(--fw-medium) var(--text-xs) / 1.3 var(--font-mono); letter-spacing: var(--tracking-wide); text-transform: uppercase; color: var(--accent); }
+  .panel__note { margin: var(--space-5) 0 0; font-size: var(--text-sm); color: var(--text-muted); }
+  .panel .code-window { box-shadow: none; }
+
+  .compare { display: grid; gap: var(--space-8); }
+  .compare > * { min-width: 0; }
+  .compare ol { margin: 0; padding: 0; list-style: none; counter-reset: step; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .compare li {
+    counter-increment: step;
+    display: flex; gap: var(--space-4); align-items: baseline;
+    padding: var(--space-3) var(--space-4);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    line-height: var(--leading-snug);
+    color: var(--text-body);
+  }
+  .compare li::before { content: counter(step); font: var(--fw-medium) var(--text-xs) / 1 var(--font-mono); color: var(--text-subtle); min-width: 1ch; }
+
+  .chart { margin: 0; }
+  .chart svg { width: 100%; height: auto; overflow: visible; }
+  .chart .grid { stroke: var(--ink-800); stroke-width: 1; }
+  .chart .target { stroke: var(--accent); stroke-width: 1; stroke-dasharray: 4 4; opacity: 0.7; }
+  .chart .tick { fill: var(--text-subtle); font: 11px var(--font-mono); }
+  .chart .bar--dsl { fill: var(--cyan-300); }
+  .chart .bar--dense { fill: var(--ink-500); }
+  .chart .val { font: 500 11px var(--font-mono); }
+  .chart .val--dsl { fill: var(--cyan-200); }
+  .chart .val--dense { fill: var(--ink-200); }
+  .chart .curve { fill: none; stroke: var(--brand); stroke-width: 2; }
+  .chart .pt { fill: var(--ink-950); stroke: var(--brand); stroke-width: 2; }
+  .chart figcaption { display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-7); margin-top: var(--space-6); font-size: var(--text-sm); color: var(--text-body); }
+  .legend { display: inline-flex; align-items: center; gap: 8px; }
+  .sw { width: 10px; height: 10px; border-radius: 2px; }
+  .sw--dsl { background: var(--cyan-300); }
+  .sw--dense { background: var(--ink-500); }
+  .chart__caption { flex-basis: 100%; display: block; margin-top: var(--space-3); font-size: var(--text-xs); color: var(--text-muted); }
+
+  .vqe { display: grid; gap: var(--space-7); }
+  .vqe pre.astro-code { font-size: 12.5px; }
+
+  @media (max-width: 1000px) {
+    .tabs { grid-template-columns: 1fr; gap: var(--space-8); }
+  }
+  @media (max-width: 640px) {
+    .panel { padding: var(--space-5); }
+    .compare ol { grid-template-columns: 1fr; }
+  }
+</style>

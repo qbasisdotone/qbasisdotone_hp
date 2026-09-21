@@ -1,0 +1,37 @@
+/* ============================================================
+   Qbasis.One — base element styles & helpers
+   Light touch: resets + a few utility primitives used by cards.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: var(--type-body);
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 { color: var(--text-strong); margin: 0; }
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code, kbd, pre { font-family: var(--font-mono); }
+
+::selection { background: var(--blue-200); color: var(--ink-950); }
+
+/* Eyebrow / kicker — uppercase mono label used across the brand */
+.qb-eyebrow {
+  font: var(--type-eyebrow);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--accent-strong);
+}
+
+/* Bra-ket brand motif: |x⟩ */
+.qb-ket {
+  font-family: var(--font-mono);
+  color: var(--accent-strong);
+  font-weight: var(--fw-medium);
+}
