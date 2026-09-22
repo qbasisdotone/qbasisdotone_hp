@@ -19,8 +19,8 @@
     "link": "문의하기"
   },
   "hero": {
-    "titleLine1": "무엇을 풀지만 신경쓰세요.",
-    "titleLine2": "회로는 DSL이 만듭니다.",
+    "titleLine1": "무엇을 풀지만 생각하세요.",
+    "titleLine2": "회로는 QASIS SL이 만듭니다.",
     "sub": "Qbasis.One은 양자 소프트웨어 개발 환경을 만듭니다. 행렬과 함수로 문제를 정의하면 DSL이 회로를 합성하고, 플랫폼이 실행한 뒤 결과를 돌려줍니다.",
     "primary": "프리뷰 문의",
     "secondary": "DSL 살펴보기",

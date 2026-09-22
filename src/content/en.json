@@ -19,7 +19,7 @@
   },
   "hero": {
     "titleLine1": "Aware just what to solve.",
-    "titleLine2": "The DSL builds the circuit.",
+    "titleLine2": "The QASIS DSL builds the circuit.",
     "sub": "Qbasis.One builds a development environment for quantum software. Define the problem with a matrix and a function; the DSL synthesizes the circuit, and the platform runs it and returns the results.",
     "primary": "Request preview",
     "secondary": "Explore the DSL",
