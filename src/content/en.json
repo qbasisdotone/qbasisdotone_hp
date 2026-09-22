@@ -1,6 +1,6 @@
 {
-  "meta": { "title": "Qbasis.One | A development environment for quantum software",
-    "description": "Define the problem with a matrix and a function. The DSL synthesizes the quantum circuit and the platform runs it."
+  "meta": { "title": "Qbasis.One | An Oasis In Your Quantum Computing Desert",
+    "description": "Start your quantum computing journey with Qbasis.One."
   },
   "nav": {
     "items": [
